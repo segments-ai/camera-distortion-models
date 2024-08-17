@@ -4,15 +4,15 @@
   "description": "",
   "main": "index.html",
   "scripts": {
-    "start": "parcel index.html --open",
-    "build": "parcel build index.html"
+    "dev": "vite",
+    "build": "vite build"
   },
   "dependencies": {
-    "@types/three": "0.136.0",
-    "three": "0.167.1"
+    "three": "^0.167.1"
   },
   "devDependencies": {
-    "parcel-bundler": "^1.6.1",
+    "@types/three": "^0.167.1",
+    "vite": "^5.4.1",
     "typescript": "^5.1.6"
   },
   "keywords": [],
