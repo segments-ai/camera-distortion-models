@@ -2,6 +2,7 @@ import {
   DataTexture,
   RGBAFormat,
   FloatType,
+  NearestFilter,
   LinearFilter,
   Matrix3,
 } from "three";
@@ -152,7 +153,7 @@ export function computeFisheyeLUT(
   imageHeight: number,
   zoomForDistortionFactor: number
 ) {
-  const resolutionOfLUT = 256;
+  const resolutionOfLUT = 512;
   const rgbaDistortionLUT = Array.from(
     { length: resolutionOfLUT * resolutionOfLUT * 4 },
     () => 0
@@ -219,8 +220,8 @@ export function computeFisheyeLUT(
     RGBAFormat,
     FloatType
   );
-  distortionLUTTexture.minFilter = LinearFilter;
-  distortionLUTTexture.magFilter = LinearFilter;
+  // distortionLUTTexture.minFilter = LinearFilter;
+  // distortionLUTTexture.magFilter = LinearFilter;
   distortionLUTTexture.needsUpdate = true;
 
   return distortionLUTTexture;

@@ -24,6 +24,7 @@ const vectorT = new Vector3().fromArray(T);
 
 const zoomForDistortionFactor = 0.5;
 
+
 const scene = new Scene();
 const camera = new PinholeCamera(
   matrixK,

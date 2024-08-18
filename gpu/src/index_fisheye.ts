@@ -47,6 +47,7 @@ const camera = new PinholeCamera(
 let distortionPass = null;
 let relAspect = window.innerWidth / window.innerHeight / (imageWidth / imageHeight)
 
+
 const loader = new PCDLoader();
 loader.load(
   "/points.pcd",

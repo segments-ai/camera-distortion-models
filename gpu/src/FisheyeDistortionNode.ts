@@ -89,20 +89,20 @@ class FisheyeDistortionNode extends TempNode {
 
             const output = vec4(0).toVar();
 
-            // If(inputCoordinatesWithAspectOffset.x.lessThanEqual(add(0.0, threshold)).or(inputCoordinatesWithAspectOffset.x.greaterThanEqual(sub(1.0, threshold))).or(inputCoordinatesWithAspectOffset.y.lessThanEqual(add(0.0, threshold))).or(inputCoordinatesWithAspectOffset.y.greaterThanEqual(sub(1.0, threshold))), () => {
+            If(inputCoordinatesWithAspectOffset.x.lessThanEqual(add(0.0, threshold)).or(inputCoordinatesWithAspectOffset.x.greaterThanEqual(sub(1.0, threshold))).or(inputCoordinatesWithAspectOffset.y.lessThanEqual(add(0.0, threshold))).or(inputCoordinatesWithAspectOffset.y.greaterThanEqual(sub(1.0, threshold))), () => {
 
-            //     output.assign(vec4(0.0, 0.0, 0.0, 0.4));
+                output.assign(vec4(0.0, 0.0, 0.0, 0.4));
 
-            // }).elseif(outputCoordinates.x.equal(0.0).and(outputCoordinates.y.equal(0.0)), () => {
+            }).elseif(outputCoordinates.x.equal(0.0).and(outputCoordinates.y.equal(0.0)), () => {
 
-            //     output.assign(vec4(0.0, 0.0, 0.0, 0.4));
+                output.assign(vec4(0.0, 0.0, 0.0, 0.4));
 
-            // }).else(() => {
+            }).else(() => {
 
-            const coordinatesWithAspectOffset = vec2(float(outputCoordinates.x.sub(relAspectOffsetX)).div(relAspectFactorX), float(outputCoordinates.y.sub(relAspectOffsetY)).div(relAspectFactorY)).toVar();
-            output.assign(sampleDiffuse(coordinatesWithAspectOffset));
+                const coordinatesWithAspectOffset = vec2(float(outputCoordinates.x.sub(relAspectOffsetX)).div(relAspectFactorX), float(outputCoordinates.y.sub(relAspectOffsetY)).div(relAspectFactorY)).toVar();
+                output.assign(sampleDiffuse(coordinatesWithAspectOffset));
 
-            // });
+            });
 
             return output;
 
