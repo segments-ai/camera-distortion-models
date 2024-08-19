@@ -4,6 +4,9 @@ import {
   FloatType,
   LinearFilter,
   Matrix3,
+  NearestFilter,
+  ClampToEdgeWrapping,
+  HalfFloatType,
 } from "three";
 
 
@@ -86,8 +89,10 @@ export function computeFisheyeLUT(
     resolutionOfLUT,
     resolutionOfLUT,
     RGBAFormat,
-    FloatType
+    FloatType,
   );
+  // distortionLUTTexture.internalFormat = "RGBA16F";
+
   distortionLUTTexture.minFilter = LinearFilter;
   distortionLUTTexture.magFilter = LinearFilter;
   distortionLUTTexture.needsUpdate = true;

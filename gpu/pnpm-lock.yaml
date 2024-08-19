@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   three:
-    specifier: mrdoob/three.js#dev
-    version: github.com/mrdoob/three.js/e02bd0987b8f9ab6fb46087bf726b30b6e5fc7ef
+    specifier: ./three-0.167.1.tgz
+    version: file:three-0.167.1.tgz
 
 devDependencies:
   '@types/three':
@@ -524,8 +524,8 @@ packages:
       fsevents: 2.3.3
     dev: true
 
-  github.com/mrdoob/three.js/e02bd0987b8f9ab6fb46087bf726b30b6e5fc7ef:
-    resolution: {tarball: https://codeload.github.com/mrdoob/three.js/tar.gz/e02bd0987b8f9ab6fb46087bf726b30b6e5fc7ef}
+  file:three-0.167.1.tgz:
+    resolution: {integrity: sha512-Zl1b8CgMhUlpO+wFQTEUyYp1kDUHMzdiokEv/ItPKgaGXCRw5EntWZFJ5DPyJo5ZVgA7vT5mo/Fb6ykaUB0IHg==, tarball: file:three-0.167.1.tgz}
     name: three
     version: 0.167.0
     dev: false

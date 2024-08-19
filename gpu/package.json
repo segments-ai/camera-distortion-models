@@ -8,7 +8,7 @@
     "build": "vite build"
   },
   "dependencies": {
-    "three": "mrdoob/three.js#dev"
+    "three": "./three-0.167.1.tgz"
   },
   "devDependencies": {
     "@types/three": "^0.167.1",
