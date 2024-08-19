@@ -153,7 +153,7 @@ export function computeFisheyeLUT(
   imageHeight: number,
   zoomForDistortionFactor: number
 ) {
-  const resolutionOfLUT = 512;
+  const resolutionOfLUT = 256;
   const rgbaDistortionLUT = Array.from(
     { length: resolutionOfLUT * resolutionOfLUT * 4 },
     () => 0
@@ -220,8 +220,9 @@ export function computeFisheyeLUT(
     RGBAFormat,
     FloatType
   );
-  // distortionLUTTexture.minFilter = LinearFilter;
-  // distortionLUTTexture.magFilter = LinearFilter;
+
+  distortionLUTTexture.minFilter = LinearFilter;
+  distortionLUTTexture.magFilter = LinearFilter;
   distortionLUTTexture.needsUpdate = true;
 
   return distortionLUTTexture;

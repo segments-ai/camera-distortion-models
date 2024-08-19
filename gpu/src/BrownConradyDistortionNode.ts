@@ -1,5 +1,5 @@
 
-import { uv, passTexture, uniform, max, QuadMesh, RenderTarget, Vector2, nodeObject, addNodeElement, NodeUpdateType, float, TempNode, div, vec2, tslFn } from 'three/tsl'
+import { uv, passTexture, uniform, max, QuadMesh, RenderTarget, Vector2, nodeObject, addNodeElement, NodeUpdateType, float, TempNode, div, vec2, tslFn, sub, mul } from 'three/tsl'
 
 const _size = /*@__PURE__*/ new Vector2();
 const _quadMesh = /*@__PURE__*/ new QuadMesh();
@@ -86,47 +86,34 @@ class BrownConradyDistortionNode extends TempNode {
 
 		const brownConradyDistortion = tslFn(() => {
 
-			const relAspectFactorX = max(1.0, relAspect).toVar();
-			const relAspectFactorY = max(1.0, div(1.0, relAspect)).toVar();
-			const relAspectOffsetX = float(relAspectFactorX.oneMinus()).div(2.0).toVar();
-			const relAspectOffsetY = float(relAspectFactorY.oneMinus()).div(2.0).toVar();
+			const relAspectFactorX = float(max(1.0, relAspect)).toVar();
+			const relAspectFactorY = float(max(1.0, div(1.0, relAspect))).toVar();
+			const relAspectOffsetX = float(sub(1.0, relAspectFactorX).div(2.0)).toVar();
+			const relAspectOffsetY = float(sub(1.0, relAspectFactorY).div(2.0)).toVar();
 			const inputCoordinatesWithAspectOffset = vec2(uvNode.x.mul(relAspectFactorX).add(relAspectOffsetX), uvNode.y.mul(relAspectFactorY).add(relAspectOffsetY)).toVar();
-
 			const k1 = coefficients.x
 			const k2 = coefficients.y
 			const p1 = coefficients.z
 			const p2 = coefficients.w
 
-			const imageCoordinates = vec2(inputCoordinatesWithAspectOffset.mul(imageDimensions).sub(principalPoint).div(focalLength))
+			const imageCoordinates = vec2(inputCoordinatesWithAspectOffset.mul(imageDimensions).sub(principalPoint).div(focalLength)).toVar();
 			const x = float(imageCoordinates.x).toVar();
 			const y = float(imageCoordinates.y).toVar();
-			const r2 = x.mul(x).add(y.mul(y));
-			const r4 = r2.mul(r2);
+			const r2 = float(x.mul(x).add(y.mul(y))).toVar();
+			const r4 = float(r2.mul(r2)).toVar();
+			const invFactor = float(div(1.0, mul(4.0, k1).mul(r2).add(mul(6.0, k2).mul(r4)).add(mul(8.0, p1).mul(y)).add(mul(8.0, p2).mul(x)).add(1.0))).toVar();
+			const dx = float(x.mul(k1.mul(r2).add(k2.mul(r4))).add(mul(2.0, p1).mul(x).mul(y)).add(p2.mul(r2.add(mul(2.0, x).mul(x))))).toVar();
+			const dy = float(y.mul(k1.mul(r2).add(k2.mul(r4))).add(p1.mul(r2.add(mul(2.0, y).mul(y)))).add(mul(2.0, p2).mul(x).mul(y))).toVar();
+			x.subAssign(invFactor.mul(dx));
+			y.subAssign(invFactor.mul(dy));
 
-			const invFactor = float(1.0).div(
-				float(4.0).mul(k1).mul(r2)
-					.add(float(6.0)).mul(k2).mul(r4)
-					.add(float(8.0)).mul(p1).mul(y)
-					.add(float(8.0)).mul(p2).mul(x)
-					.add(1.0)
-			);
 
-			const dx = x.mul(k1).mul(r2).add(k2).mul(r4)
-				.add(float(2.0).mul(p1).mul(x).mul(y))
-				.add(p2.mul(r2.add(float(2.0)).mul(x).mul(x)));
+			const coordinates = vec2(x, y).toVar();
 
-			const dy = y.mul(k1.mul(r2).add(k2.mul(r4)))
-				.add(p1.mul(r2.add(float(2.0)).mul(y).mul(y)))
-				.add(float(2.0).mul(p2).mul(x).mul(y));
-
-			const newX = x.sub(invFactor.mul(dx));
-			const newY = y.sub(invFactor.mul(dy));
-
-			const coordinates = vec2(newX, newY);
 			const principalPointOffset = imageDimensions
 				.div(2.0)
 				.sub(principalPoint)
-				.mul(zoomForDistortionFactor.oneMinus())
+				.mul(zoomForDistortionFactor.oneMinus()).toVar('principalPointOffset');
 
 			const outputCoordinates = vec2(
 				coordinates
@@ -136,12 +123,12 @@ class BrownConradyDistortionNode extends TempNode {
 					.add(principalPointOffset)
 			)
 				.div(imageDimensions)
-				.toVar();
+				.toVar('outputCoordinates');
 
 			const coordinatesWithAspectOffset = vec2(
-				outputCoordinates.x.sub(relAspectOffsetX).div(relAspectFactorX),
-				outputCoordinates.y.sub(relAspectOffsetY).div(relAspectFactorY)
-			).toVar();
+				float(outputCoordinates.x.sub(relAspectOffsetX)).div(relAspectFactorX),
+				float(outputCoordinates.y.sub(relAspectOffsetY)).div(relAspectFactorY)
+			).toVar('coordinatesWithAspectOffset');
 
 			return sampleDiffuse(coordinatesWithAspectOffset)
 
@@ -151,6 +138,7 @@ class BrownConradyDistortionNode extends TempNode {
 
 		const materialComposed = this._materialComposed || (this._materialComposed = builder.createNodeMaterial());
 		materialComposed.fragmentNode = brownConradyDistortion();
+
 
 		_quadMesh.material = materialComposed;
 

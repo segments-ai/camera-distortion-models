@@ -51,6 +51,7 @@ loader.load(
   "/points.pcd",
   function (points: any) {
 
+    // scene.add(points);
     const geometry = new InstancedPointsGeometry();
     geometry.setPositions(points.geometry.attributes.position.array);
     geometry.instanceCount = points.geometry.attributes.position.count;

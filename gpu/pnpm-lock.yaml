@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   three:
-    specifier: ^0.167.1
-    version: 0.167.1
+    specifier: mrdoob/three.js#dev
+    version: github.com/mrdoob/three.js/e02bd0987b8f9ab6fb46087bf726b30b6e5fc7ef
 
 devDependencies:
   '@types/three':
@@ -480,10 +480,6 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /three@0.167.1:
-    resolution: {integrity: sha512-gYTLJA/UQip6J/tJvl91YYqlZF47+D/kxiWrbTon35ZHlXEN0VOo+Qke2walF1/x92v55H6enomymg4Dak52kw==}
-    dev: false
-
   /typescript@5.5.4:
     resolution: {integrity: sha512-Mtq29sKDAEYP7aljRgtPOpTvOfbwRWlS6dPRzwjdE+C0R4brX/GUyhHSecbHMFLNBLcJIPt9nl9yG5TZ1weH+Q==}
     engines: {node: '>=14.17'}
@@ -527,3 +523,9 @@ packages:
     optionalDependencies:
       fsevents: 2.3.3
     dev: true
+
+  github.com/mrdoob/three.js/e02bd0987b8f9ab6fb46087bf726b30b6e5fc7ef:
+    resolution: {tarball: https://codeload.github.com/mrdoob/three.js/tar.gz/e02bd0987b8f9ab6fb46087bf726b30b6e5fc7ef}
+    name: three
+    version: 0.167.0
+    dev: false

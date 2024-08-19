@@ -79,7 +79,7 @@ loader.load(
 
 const renderer = new WebGPURenderer({
   antialias: false,
-  forceWebGL: true
+  forceWebGL: false
 });
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
