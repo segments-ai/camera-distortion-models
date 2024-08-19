@@ -34,7 +34,7 @@ export const FisheyeDistortionShader = {
       float relAspectOffsetY = ((1.0 - relAspectFactorY) / 2.0);
       vec2 inputCoordinatesWithAspectOffset = vec2(vUv.x * relAspectFactorX + relAspectOffsetX , vUv.y * relAspectFactorY + relAspectOffsetY);
 
-      // discard pixels on the edge to avoid streaking
+      // // discard pixels on the edge to avoid streaking
       float threshold = 0.001;
       if (
         inputCoordinatesWithAspectOffset.x <= 0.0 + threshold ||
@@ -47,8 +47,8 @@ export const FisheyeDistortionShader = {
         return;
       }
 
-      // look up distortion in LUT
-      vec2 outputCoordinates = texture2D(uDistortionLUT, inputCoordinatesWithAspectOffset).rg;
+      // // look up distortion in LUT
+      vec2 outputCoordinates = texture(uDistortionLUT, inputCoordinatesWithAspectOffset).rg;
       if (outputCoordinates.x == 0.0 && outputCoordinates.y == 0.0) {
         // show black overlay
         gl_FragColor = vec4(0.0, 0.0, 0.0, 0.4);
@@ -56,7 +56,7 @@ export const FisheyeDistortionShader = {
       }
       
       vec2 coordinatesWithAspectOffset = vec2((outputCoordinates.x - relAspectOffsetX) / relAspectFactorX, (outputCoordinates.y - relAspectOffsetY) / relAspectFactorY);        
-      gl_FragColor = texture2D(tDiffuse, coordinatesWithAspectOffset);
+      gl_FragColor = texture(tDiffuse, coordinatesWithAspectOffset);
     }
   `,
 };

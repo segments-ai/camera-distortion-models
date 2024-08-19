@@ -74,6 +74,10 @@ const distortionLUTTexture = computeFisheyeLUT(
   imageHeight,
   zoomForDistortionFactor
 );
+
+console.log(
+  distortionLUTTexture.source.data
+)
 distortionPass.uniforms.uDistortionLUT.value = distortionLUTTexture;
 distortionPass.uniforms.uRelAspect.value =
   window.innerWidth / window.innerHeight / (imageWidth / imageHeight);

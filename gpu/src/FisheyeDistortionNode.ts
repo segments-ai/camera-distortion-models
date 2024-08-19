@@ -1,5 +1,5 @@
 
-import { uv, texture, passTexture, uniform, max, QuadMesh, RenderTarget, Vector2, nodeObject, addNodeElement, NodeUpdateType, float, vec4, TempNode, If, add, sub, div, vec2, tslFn } from 'three/tsl'
+import { uv, textureLoad, texture, passTexture, uniform, max, QuadMesh, RenderTarget, Vector2, nodeObject, addNodeElement, NodeUpdateType, float, vec4, TempNode, If, add, sub, div, vec2, tslFn, vec3 } from 'three/tsl'
 
 const _size = /*@__PURE__*/ new Vector2();
 const _quadMesh = /*@__PURE__*/ new QuadMesh();
@@ -12,6 +12,8 @@ class FisheyeDistortionNode extends TempNode {
 
         this.textureNode = textureNode;
         this.distortionLUT = texture(distortionLUT);
+        this.distortionLUT.setPrecision('high');
+
         this.relAspect = uniform(relAspect);
 
         this._pixelRatio = 1;
@@ -45,7 +47,7 @@ class FisheyeDistortionNode extends TempNode {
 
     }
 
-    updateBefore(frame) {
+    async updateBefore(frame) {
 
         const { renderer } = frame;
 
@@ -84,10 +86,14 @@ class FisheyeDistortionNode extends TempNode {
             const relAspectOffsetX = float(sub(1.0, relAspectFactorX).div(2.0)).toVar();
             const relAspectOffsetY = float(sub(1.0, relAspectFactorY).div(2.0)).toVar();
             const inputCoordinatesWithAspectOffset = vec2(uvNode.x.mul(relAspectFactorX).add(relAspectOffsetX), uvNode.y.mul(relAspectFactorY).add(relAspectOffsetY)).toVar();
-            const threshold = float(0.001).toVar();
-            const outputCoordinates = vec2(sampleDistortionLUT(inputCoordinatesWithAspectOffset).rg).toVar();
 
-            const output = vec4(0).toVar();
+            // flip Y inputCoordinatesWithAspectOffset
+            inputCoordinatesWithAspectOffset.y = sub(1.0, inputCoordinatesWithAspectOffset.y);
+
+            const output = vec4(0.).toVar();
+
+            const threshold = float(0.001).toVar();
+            const outputCoordinates = sampleDistortionLUT(inputCoordinatesWithAspectOffset).toVar();
 
             If(inputCoordinatesWithAspectOffset.x.lessThanEqual(add(0.0, threshold)).or(inputCoordinatesWithAspectOffset.x.greaterThanEqual(sub(1.0, threshold))).or(inputCoordinatesWithAspectOffset.y.lessThanEqual(add(0.0, threshold))).or(inputCoordinatesWithAspectOffset.y.greaterThanEqual(sub(1.0, threshold))), () => {
 
@@ -100,6 +106,7 @@ class FisheyeDistortionNode extends TempNode {
             }).else(() => {
 
                 const coordinatesWithAspectOffset = vec2(float(outputCoordinates.x.sub(relAspectOffsetX)).div(relAspectFactorX), float(outputCoordinates.y.sub(relAspectOffsetY)).div(relAspectFactorY)).toVar();
+                coordinatesWithAspectOffset.y = sub(1.0, coordinatesWithAspectOffset.y);
                 output.assign(sampleDiffuse(coordinatesWithAspectOffset));
 
             });

@@ -60,7 +60,7 @@ loader.load(
     const material = new InstancedPointsNodeMaterial({
 
       color: 0x00ffff,
-      pointWidth: 1, // in pixel units
+      pointWidth: 1.5, // in pixel units
       alphaToCoverage: false,
 
     });
@@ -78,10 +78,12 @@ loader.load(
 );
 
 const renderer = new WebGPURenderer({
-  antialias: false,
+  alpha: true,
+  antialias: true,
   forceWebGL: false
 });
-renderer.setPixelRatio(window.devicePixelRatio);
+
+renderer.setPixelRatio(1 / zoomForDistortionFactor);
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setAnimationLoop(animate);
 document.body.appendChild(renderer.domElement);
@@ -94,9 +96,7 @@ postProcessing.outputColorTransform = false;
 
 
 const scenePass = pass(scene, camera);
-const outputPass = renderOutput(scenePass);
-
-renderer.setPixelRatio(1 / zoomForDistortionFactor);
+// const outputPass = renderOutput(scenePass);
 
 const distortionLUTTexture = computeFisheyeLUT(
   matrixK,
@@ -106,9 +106,12 @@ const distortionLUTTexture = computeFisheyeLUT(
   zoomForDistortionFactor
 );
 
+setTimeout(() => {
+  // distortionLUTTexture.needsUpdate = true;
+}, 1000);
 // fisheye
 distortionPass = FisheyeDistortion(
-  outputPass,
+  scenePass,
   distortionLUTTexture,
   relAspect
 )
@@ -118,7 +121,7 @@ postProcessing.outputNode = distortionPass;
 
 window.addEventListener("resize", () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
-  distortionPass.relAspect.value = window.innerWidth / window.innerHeight / (imageWidth / imageHeight)
+  // distortionPass.relAspect.value = window.innerWidth / window.innerHeight / (imageWidth / imageHeight)
 })
 
 
