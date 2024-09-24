@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <title>Pinhole camera model with fisheye distortion</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+      canvas {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    </style>
+  </head>
+  <body>
+    <img src="https://segmentsai-prod.s3.eu-west-2.amazonaws.com/assets/admin-tobias/608b6353-3914-4537-b099-b8345f41a94f.png">
+    <div id="app"></div>
+
+    <script src="src/index.ts"></script>
+  </body>
+</html>
