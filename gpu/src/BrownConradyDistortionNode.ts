@@ -1,5 +1,5 @@
 
-import { uv, passTexture, uniform, max, QuadMesh, RenderTarget, Vector2, nodeObject, addNodeElement, NodeUpdateType, float, TempNode, div, vec2, tslFn, sub, mul } from 'three/tsl'
+import { uv, passTexture, uniform, max, QuadMesh, RenderTarget, Vector2, nodeObject, addNodeElement, NodeUpdateType, float, TempNode, div, vec2, Fn, sub, mul } from 'three/tsl'
 
 const _size = /*@__PURE__*/ new Vector2();
 const _quadMesh = /*@__PURE__*/ new QuadMesh();
@@ -84,7 +84,7 @@ class BrownConradyDistortionNode extends TempNode {
 
 		const sampleDiffuse = (uv) => textureNode.uv(uv)
 
-		const brownConradyDistortion = tslFn(() => {
+		const brownConradyDistortion = Fn(() => {
 
 			const relAspectFactorX = float(max(1.0, relAspect)).toVar();
 			const relAspectFactorY = float(max(1.0, div(1.0, relAspect))).toVar();

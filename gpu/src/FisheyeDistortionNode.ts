@@ -1,5 +1,5 @@
 
-import { uv, textureLoad, texture, passTexture, uniform, max, QuadMesh, RenderTarget, Vector2, nodeObject, addNodeElement, NodeUpdateType, float, vec4, TempNode, If, add, sub, div, vec2, tslFn, vec3 } from 'three/tsl'
+import { uv, textureLoad, texture, passTexture, uniform, max, QuadMesh, RenderTarget, Vector2, nodeObject, addNodeElement, NodeUpdateType, float, vec4, TempNode, If, add, sub, div, vec2, Fn, vec3 } from 'three/tsl'
 
 const _size = /*@__PURE__*/ new Vector2();
 const _quadMesh = /*@__PURE__*/ new QuadMesh();
@@ -79,7 +79,7 @@ class FisheyeDistortionNode extends TempNode {
         const sampleDiffuse = (uv) => textureNode.uv(uv)
         const sampleDistortionLUT = (uv) => distortionLUT.uv(uv)
 
-        const fisheyeDistortion = tslFn(() => {
+        const fisheyeDistortion = Fn(() => {
 
             const relAspectFactorX = float(max(1.0, relAspect)).toVar();
             const relAspectFactorY = float(max(1.0, div(1.0, relAspect))).toVar();
@@ -99,11 +99,11 @@ class FisheyeDistortionNode extends TempNode {
 
                 output.assign(vec4(0.0, 0.0, 0.0, 0.4));
 
-            }).elseif(outputCoordinates.x.equal(0.0).and(outputCoordinates.y.equal(0.0)), () => {
+            }).ElseIf(outputCoordinates.x.equal(0.0).and(outputCoordinates.y.equal(0.0)), () => {
 
                 output.assign(vec4(0.0, 0.0, 0.0, 0.4));
 
-            }).else(() => {
+            }).Else(() => {
 
                 const coordinatesWithAspectOffset = vec2(float(outputCoordinates.x.sub(relAspectOffsetX)).div(relAspectFactorX), float(outputCoordinates.y.sub(relAspectOffsetY)).div(relAspectFactorY)).toVar();
                 coordinatesWithAspectOffset.y = sub(1.0, coordinatesWithAspectOffset.y);
